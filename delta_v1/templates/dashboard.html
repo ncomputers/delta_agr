@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <p>User ID: {{ user_id }}</p>
+
+    <h2>Store API Keys</h2>
+    <form method="post" action="/api-keys/{{ user_id }}">
+        <input name="api_key" placeholder="API Key" required />
+        <input name="api_secret" placeholder="API Secret" required />
+        <button type="submit">Save</button>
+    </form>
+
+    <h2>Create Trade Rule</h2>
+    <form method="post" action="/rules/{{ user_id }}">
+        <input name="loss_threshold" placeholder="Loss Threshold" required />
+        <input name="quantity" placeholder="Quantity" required />
+        <input name="profit_target" placeholder="Profit Target" required />
+        <button type="submit">Save Rule</button>
+    </form>
+
+    <h2>Latest Price</h2>
+    <div id="price">Loading...</div>
+    <script>
+    async function fetchPrice() {
+        const resp = await fetch('/price');
+        const data = await resp.json();
+        document.getElementById('price').innerText = data['BTCUSDT'] || 'N/A';
+    }
+    fetchPrice();
+    setInterval(fetchPrice, 5000);
+    </script>
+</body>
+</html>
